@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: evalkit-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evalkit
+      POSTGRES_PASSWORD: evalkit
+      POSTGRES_DB: evalkit
+    ports:
+      - "5433:5432"
+    volumes:
+      - evalkit_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evalkit -d evalkit"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  evalkit_pg:

@@ -1,0 +1,5 @@
+{"prompt":"What is 9 × 8?","expected":"72","tags":["math"]}
+{"prompt":"What HTTP status means Not Found?","expected":"404","tags":["coding"]}
+{"prompt":"What is the capital of Japan?","expected":"Tokyo","tags":["rag"]}
+{"prompt":"If a train leaves at 3pm and arrives 2 hours later, what time does it arrive?","expected":"5pm","tags":["reasoning"]}
+{"prompt":"What is the default port for Redis?","expected":"6379","tags":["coding","rag"]}

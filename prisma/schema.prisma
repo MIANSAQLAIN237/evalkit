@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  projects     Project[]
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String    @default("")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  datasets    Dataset[]
+  runs        EvalRun[]
+
+  @@index([userId, updatedAt])
+}
+
+model Dataset {
+  id        String        @id @default(cuid())
+  projectId String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  itemCount Int           @default(0)
+  createdAt DateTime      @default(now())
+  items     DatasetItem[]
+  runs      EvalRun[]
+
+  @@index([projectId])
+}
+
+model DatasetItem {
+  id        String       @id @default(cuid())
+  datasetId String
+  dataset   Dataset      @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  prompt    String
+  expected  String
+  tags      String[]     @default([])
+  results   EvalResult[]
+
+  @@index([datasetId])
+}
+
+enum RunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+model EvalRun {
+  id           String         @id @default(cuid())
+  projectId    String
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  datasetId    String
+  dataset      Dataset        @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  status       RunStatus      @default(PENDING)
+  error        String?
+  judgeEnabled Boolean        @default(true)
+  judgeMode    String         @default("heuristic")
+  temperature  Float          @default(0)
+  maxTokens    Int            @default(512)
+  createdAt    DateTime       @default(now())
+  completedAt  DateTime?
+  models       EvalRunModel[]
+  results      EvalResult[]
+
+  @@index([projectId, createdAt])
+}
+
+model EvalRunModel {
+  id               String       @id @default(cuid())
+  runId            String
+  run              EvalRun      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  provider         String
+  modelId          String
+  responseSource   String       @default("fixture")
+  inputTokens      Int          @default(0)
+  outputTokens     Int          @default(0)
+  costUsd          Float        @default(0)
+  avgLatencyMs     Float        @default(0)
+  exactAccuracy    Float        @default(0)
+  containsAccuracy Float        @default(0)
+  avgJudgeScore    Float        @default(0)
+  errorCount       Int          @default(0)
+  results          EvalResult[]
+
+  @@index([runId])
+}
+
+model EvalResult {
+  id            String       @id @default(cuid())
+  runId         String
+  run           EvalRun      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  runModelId    String
+  runModel      EvalRunModel @relation(fields: [runModelId], references: [id], onDelete: Cascade)
+  itemId        String
+  item          DatasetItem  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  output        String       @default("")
+  latencyMs     Int          @default(0)
+  inputTokens   Int          @default(0)
+  outputTokens  Int          @default(0)
+  costUsd       Float        @default(0)
+  exactMatch    Boolean      @default(false)
+  containsMatch Boolean      @default(false)
+  judgeScore    Int?
+  judgeReason   String?
+  error         String?
+
+  @@index([runId, exactMatch])
+  @@index([runModelId])
+  @@index([itemId])
+}
