@@ -315,5 +315,3 @@ Keep public demo datasets small (≤ 30 items). Long runs can hit serverless tim
 ## Stack
 
 Next.js 16 · React 19 · TypeScript · PostgreSQL · Prisma · Zod · Vitest · Docker
-
-MIT license. Built as a GitHub portfolio project for LLM evaluation / training-data work.
