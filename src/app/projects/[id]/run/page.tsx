@@ -29,12 +29,14 @@ export default async function NewRunPage({
         title="Run eval"
         description="Pick a dataset and 1–3 models. Temperature is fixed at 0 for reproducibility."
         actions={
-          <Link href={`/projects/${project.id}`}>
-            <Button variant="secondary">Back</Button>
+          <Link href={`/projects/${project.id}`} className="w-full sm:w-auto">
+            <Button variant="secondary" className="w-full sm:w-auto">
+              Back
+            </Button>
           </Link>
         }
       />
-      <div className="max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6">
+      <div className="max-w-2xl rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4 sm:p-6">
         <RunForm
           projectId={project.id}
           datasets={project.datasets.map((dataset) => ({

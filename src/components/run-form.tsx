@@ -97,7 +97,7 @@ export function RunForm({
         <select
           value={datasetId}
           onChange={(event) => setDatasetId(event.target.value)}
-          className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+          className="min-h-11 w-full min-w-0 rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-zinc-100"
         >
           {datasets.map((dataset) => (
             <option key={dataset.id} value={dataset.id}>
@@ -119,7 +119,7 @@ export function RunForm({
             return (
               <label
                 key={key}
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm ${
+                className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border p-3 text-sm ${
                   checked ? "border-emerald-400/40 bg-emerald-400/5" : "border-zinc-800 bg-zinc-950"
                 }`}
               >
@@ -139,7 +139,7 @@ export function RunForm({
         </div>
       </div>
 
-      <label className="flex items-center gap-3 text-sm text-zinc-300">
+      <label className="flex items-start gap-3 text-sm leading-6 text-zinc-300">
         <input
           type="checkbox"
           checked={judgeEnabled}
@@ -149,9 +149,11 @@ export function RunForm({
       </label>
 
       <ErrorText>{error}</ErrorText>
-      {progress ? <p className="font-mono text-sm text-emerald-300">{progress}</p> : null}
+      {progress ? (
+        <p className="break-all font-mono text-sm text-emerald-300">{progress}</p>
+      ) : null}
 
-      <Button type="submit" disabled={pending || models.length === 0}>
+      <Button type="submit" disabled={pending || models.length === 0} className="w-full sm:w-auto">
         {pending ? "Running eval…" : "Run eval"}
       </Button>
     </form>

@@ -39,7 +39,7 @@ export function DeleteProjectButton({ projectId }: { projectId: string }) {
   }
 
   return (
-    <Button variant="danger" onClick={onDelete} disabled={pending}>
+    <Button variant="danger" onClick={onDelete} disabled={pending} className="w-full sm:w-auto">
       Delete
     </Button>
   );

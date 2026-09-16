@@ -29,14 +29,14 @@ export default async function DashboardPage() {
           body="Create a project, import JSONL, and run your first model comparison."
         />
       ) : (
-        <div className="mb-10 grid gap-4 md:grid-cols-2">
+        <div className="mb-10 grid gap-4 sm:grid-cols-2">
           {projects.map((project) => (
             <Link
               key={project.id}
               href={`/projects/${project.id}`}
-              className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5 transition hover:border-emerald-400/30"
+              className="min-w-0 rounded-2xl border border-zinc-800 bg-zinc-950/60 p-4 transition hover:border-emerald-400/30 sm:p-5"
             >
-              <h2 className="text-lg font-medium text-zinc-50">{project.name}</h2>
+              <h2 className="break-words text-lg font-medium text-zinc-50">{project.name}</h2>
               <p className="mt-1 line-clamp-2 text-sm text-zinc-500">
                 {project.description || "No description"}
               </p>

@@ -45,11 +45,13 @@ export default async function ProjectPage({
         description={project.description || "Eval project"}
         actions={
           <>
-            <Link href={`/projects/${project.id}/run`}>
-              <Button>Run eval</Button>
+            <Link href={`/projects/${project.id}/run`} className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto">Run eval</Button>
             </Link>
-            <Link href="/dashboard">
-              <Button variant="secondary">All projects</Button>
+            <Link href="/dashboard" className="w-full sm:w-auto">
+              <Button variant="secondary" className="w-full sm:w-auto">
+                All projects
+              </Button>
             </Link>
             <DeleteProjectButton projectId={project.id} />
           </>
@@ -71,50 +73,86 @@ export default async function ProjectPage({
         {project.runs.length === 0 ? (
           <p className="text-sm text-zinc-500">No runs yet. Import a dataset, then start an eval.</p>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-zinc-800">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-zinc-900 text-xs uppercase tracking-wide text-zinc-500">
-                <tr>
-                  <th className="px-4 py-3">When</th>
-                  <th className="px-4 py-3">Dataset</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Best exact</th>
-                  <th className="px-4 py-3">Models</th>
-                </tr>
-              </thead>
-              <tbody>
-                {project.runs.map((run) => (
-                  <tr key={run.id} className="border-t border-zinc-800">
-                    <td className="px-4 py-3">
-                      <Link href={`/projects/${project.id}/runs/${run.id}`} className="text-emerald-300 hover:underline">
-                        {run.createdAt.toLocaleString()}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3">{run.dataset.name}</td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        tone={
-                          run.status === "COMPLETED"
-                            ? "emerald"
-                            : run.status === "FAILED"
-                              ? "rose"
-                              : "amber"
-                        }
-                      >
-                        {run.status.toLowerCase()}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3 font-mono">
-                      {run.models[0] ? formatPct(run.models[0].exactAccuracy) : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-zinc-400">
-                      {run.models.map((model) => model.modelId).join(" · ")}
-                    </td>
+          <>
+            <div className="grid gap-3 md:hidden">
+              {project.runs.map((run) => (
+                <Link
+                  key={run.id}
+                  href={`/projects/${project.id}/runs/${run.id}`}
+                  className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm text-emerald-300">{run.createdAt.toLocaleString()}</p>
+                    <Badge
+                      tone={
+                        run.status === "COMPLETED"
+                          ? "emerald"
+                          : run.status === "FAILED"
+                            ? "rose"
+                            : "amber"
+                      }
+                    >
+                      {run.status.toLowerCase()}
+                    </Badge>
+                  </div>
+                  <p className="mt-2 text-sm text-zinc-200">{run.dataset.name}</p>
+                  <p className="mt-1 font-mono text-xs text-zinc-500">
+                    {run.models[0] ? formatPct(run.models[0].exactAccuracy) : "—"} exact
+                    {run.models.length > 0
+                      ? ` · ${run.models.map((model) => model.modelId).join(" · ")}`
+                      : ""}
+                  </p>
+                </Link>
+              ))}
+            </div>
+            <div className="hidden overflow-x-auto rounded-2xl border border-zinc-800 md:block">
+              <table className="min-w-[720px] w-full text-left text-sm">
+                <thead className="bg-zinc-900 text-xs uppercase tracking-wide text-zinc-500">
+                  <tr>
+                    <th className="px-4 py-3">When</th>
+                    <th className="px-4 py-3">Dataset</th>
+                    <th className="px-4 py-3">Status</th>
+                    <th className="px-4 py-3">Best exact</th>
+                    <th className="px-4 py-3">Models</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {project.runs.map((run) => (
+                    <tr key={run.id} className="border-t border-zinc-800">
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/projects/${project.id}/runs/${run.id}`}
+                          className="text-emerald-300 hover:underline"
+                        >
+                          {run.createdAt.toLocaleString()}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">{run.dataset.name}</td>
+                      <td className="px-4 py-3">
+                        <Badge
+                          tone={
+                            run.status === "COMPLETED"
+                              ? "emerald"
+                              : run.status === "FAILED"
+                                ? "rose"
+                                : "amber"
+                          }
+                        >
+                          {run.status.toLowerCase()}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-3 font-mono">
+                        {run.models[0] ? formatPct(run.models[0].exactAccuracy) : "—"}
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">
+                        {run.models.map((model) => model.modelId).join(" · ")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
@@ -128,10 +166,12 @@ export default async function ProjectPage({
               {project.datasets.map((dataset) => (
                 <li
                   key={dataset.id}
-                  className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3"
                 >
-                  <span>{dataset.name}</span>
-                  <span className="font-mono text-xs text-zinc-500">{dataset.itemCount} items</span>
+                  <span className="min-w-0 break-words">{dataset.name}</span>
+                  <span className="shrink-0 font-mono text-xs text-zinc-500">
+                    {dataset.itemCount} items
+                  </span>
                 </li>
               ))}
             </ul>

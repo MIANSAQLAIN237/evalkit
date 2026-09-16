@@ -12,15 +12,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
-html,
-body {
+html {
   height: 100%;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  min-height: 100%;
+  min-height: 100dvh;
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   background:
-    radial-gradient(1200px 500px at 10% -10%, rgba(52, 211, 153, 0.08), transparent 50%),
-    radial-gradient(900px 400px at 100% 0%, rgba(16, 185, 129, 0.05), transparent 40%),
+    radial-gradient(min(1200px, 100vw) 500px at 10% -10%, rgba(52, 211, 153, 0.08), transparent 50%),
+    radial-gradient(min(900px, 100vw) 400px at 100% 0%, rgba(16, 185, 129, 0.05), transparent 40%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
@@ -28,4 +34,33 @@ body {
 
 a {
   text-underline-offset: 3px;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (min-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 0.875rem;
+  }
 }

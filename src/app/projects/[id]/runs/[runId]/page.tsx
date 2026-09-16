@@ -48,14 +48,20 @@ export default async function RunDetailPage({
         description={`${run.dataset.name} · ${run.results.length} scored answers · judge: ${run.judgeMode}`}
         actions={
           <>
-            <a href={`/api/runs/${run.id}/export?format=csv`}>
-              <Button variant="secondary">Export CSV</Button>
+            <a href={`/api/runs/${run.id}/export?format=csv`} className="w-full sm:w-auto">
+              <Button variant="secondary" className="w-full sm:w-auto">
+                Export CSV
+              </Button>
             </a>
-            <a href={`/api/runs/${run.id}/export?format=json`}>
-              <Button variant="secondary">Export JSON</Button>
+            <a href={`/api/runs/${run.id}/export?format=json`} className="w-full sm:w-auto">
+              <Button variant="secondary" className="w-full sm:w-auto">
+                Export JSON
+              </Button>
             </a>
-            <Link href={`/projects/${run.projectId}`}>
-              <Button variant="ghost">Back to project</Button>
+            <Link href={`/projects/${run.projectId}`} className="w-full sm:w-auto">
+              <Button variant="ghost" className="w-full sm:w-auto">
+                Back to project
+              </Button>
             </Link>
           </>
         }
